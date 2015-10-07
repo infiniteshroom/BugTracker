@@ -1,0 +1,112 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bugtracker - Create a ticket{% endblock %}
+
+{% block styles %}
+	{{ Asset.css('default/css/summernote.css') }}
+	{{ Asset.css('default/css/bootstrap-select.css') }}
+{% endblock %}
+
+{% block scripts %}
+	{{ Asset.js('default/js/summernote.js') }}
+	{{ Asset.js('default/js/bootstrap-select.js') }}
+{% endblock %}
+
+{% block content %}
+	
+	<h1><span class='colorize'>Create</span> a ticket</h1>
+
+	<h3 style='color:gray;margin-top:-10px;'>Fill in the details - to submit a new bug ticket.</h3>
+
+	{% if errors['title'] is defined or errors['content'] is defined %}
+	<h4><span class='colorize'><i class='fa fa-warning'></i> Please complete all required details</h4>
+	{% endif %}
+
+	<form action='{{app.Path("web")}}/ticket/create/' method='post'>
+	<div style='width:90%'>
+		{% if errors['title'] is defined %}
+		<div class="form-group has-error">
+		{% else %}
+		<div class="form-group">
+		{% endif %}
+
+			{% if title is defined %}
+			<input type='text' class='form-control ticket-create' name='title' value='{{ title }}' placeholder='Bug title.....'/>
+			{% else %}
+			<input type='text' class='form-control ticket-create' name='title' placeholder='Bug title.....'/>
+			{% endif %}
+
+			{% if content is defined %}
+			<textarea class="editor" name="content" placeholder='Enter a description..'>{{ content }}</textarea>
+			{% else %}
+			<textarea class="editor" name="content" placeholder='Enter a description..'></textarea>
+			{% endif %}
+		</div>
+
+	</div>
+
+	<h2><span class='colorize'>Ticket</span> Details</h2>
+
+	<div class='row'>
+		<div class='col-xs-1 col-sm-2' style='line-height:2'>
+			<h3>Version:</h3>
+			<h3>Component:</h3>
+			<h3>Assigned to:</h3>
+		</div>
+
+		<div class='col-xs-2 col-sm-4'>
+			<select class="selectpicker" name='version' data-style="btn-default">
+				{% for version in versions %}
+				<option value="{{ version.id }}">{{ version.name }}</option>
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='component' data-style="btn-default">
+				{% for component in components %}
+				<option value="{{ component.id }}">{{ component.name }}</option>
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='assign' data-style="btn-default">
+				<option value=''>Not assigned</option>
+				{% for user in users %}
+				<option value="{{ user.id }}">{{ user.username }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class='col-xs-1 col-sm-2' style='line-height:2'>
+			<h3>Type:</h3>
+			<h3>Status:</h3>
+			<h3>Priority:</h3>
+		</div>
+
+		<div class='col-xs-1 col-sm-2'>
+			<select class="selectpicker" name='type' data-style="btn-default">
+				{% for type in types %}
+				<option value="{{ type.id }}">{{ type.name }}</option>
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='status' data-style="btn-default">
+				{% for s in status %}
+				<option value="{{ s.id }}">{{ s.name }}</option>
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='priority' data-style="btn-default">
+				{% for priority in priorities %}
+				<option value="{{ priority.id }}">{{ priority.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div style='margin-top:30px'>
+	<button class='btn btn-danger'>Create</button>
+	<button class='btn btn-default'>Reset</button>
+	</div>
+	</form>
+
+	<div class='clearfix'></div>
+{% endblock %}

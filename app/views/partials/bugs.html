@@ -1,0 +1,76 @@
+<table class="table table-hover tablesorter" id='bug-table'>
+    <thead>
+      <th><a href='#'>Ticket #</a></th>
+      <th><a href='#'>Name</a></th>
+      <th><a href='#'>Description</a></th>
+      <th><a href='#'>Version</a></th>
+      <th><a href='#'>Component</a></th>
+      <th><a href='#'>Status</a></th>
+      <th><a href='#'>Assigned to</a></th>
+
+      {% if auth.IsGuest() == false %}
+      <th></th>
+      {% endif %}
+    </thead>
+
+    <tbody>
+       {% for bug in bugs.results() %}
+       	{# define relation variables - This is important, as it reduces database calls #}
+		    {% set user = bug.Relation('User').results()[0] %}
+
+        <tr>
+          <td>{{ bug.id }}</td>
+          <td><a href='{{ app.Path("web") }}/ticket/view/{{ bug.id }}'>{{ bug.title }}</a>
+            <p id='date'>{{ bug.getFormattedDate() }}</p>
+          </td>
+          <td>{{ bug.getShortDescription() }}..</td>
+          <td><span class="pull-left tag label label-default">{{ bug.Relation('Version').results('one').name }}</span></td>
+          <td><span class="pull-left tag label label-info">{{ bug.Relation('Component').results('one').name }}</span></td>
+          <td>
+          {% if bug.status_id == 1 %}
+            <span class="pull-left tag label label-info">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 3 %}
+            <span class="pull-left tag label label-default">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 4 %}
+            <span class="pull-left tag label label-success">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 6 %}
+            <span class="pull-left tag label label-danger">{{ bug.Relation('Status').results('one').name}}</span>
+          {% endif %}
+          </td>
+
+          <td>
+          <img src='{{ user.getAvatarLink() }}' id='avatar'></img>
+          <a href='{{ app.Path("web") }}/profile/view/{{ user.username }}' class='pull-left'>{{user.username}}</a>
+
+          {% if auth.IsGuest() == false %}
+          <td class='bug-settings'>
+          <a href='{{ app.Path("web") }}/ticket/edit/{{ bug.id }}'><i class='fa fa-edit'></i></a>
+          <a href='{{ app.Path("web") }}/ticket/delete/{{ bug.id }}'><i class="fa fa-times"></i></a>
+          </td>
+          {% endif %}
+        </tr>
+       {% endfor %}
+    </tbody>
+
+    <tfooter>
+
+    </tfooter>
+  </table>
+
+<!--
+  <ul class="pagination">
+  <li><a href="#">&laquo;</a></li>
+  <li><a href="#">1</a></li>
+  <li><a href="#">2</a></li>
+  <li><a href="#">3</a></li>
+  <li><a href="#">4</a></li>
+  <li><a href="#">5</a></li>
+  <li><a href="#">&raquo;</a></li>
+</ul>-->
+
+ {% if auth.IsGuest() == false %}
+      <p><a href='{{ app.Path('web') }}/ticket/create/' class='btn btn-default'><i class='fa fa-bug'></i> Create a ticket</a></p>
+  {% endif %}
+
+</div>
+{% include "partials/sidebar.html" %}

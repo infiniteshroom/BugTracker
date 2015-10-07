@@ -1,0 +1,52 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bug Tracker - Login{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-md-4 col-md-offset-4">
+	<div class="panel panel-default">
+	  	<div class="panel-heading">
+	    	<h3 class="panel-title">Please sign in</h3>
+	 	</div>
+	  	<div class="panel-body">
+	  		{% if errors['username'] is defined or errors['password'] is defined %}
+				<p><i class='fa fa-warning'></i> Please complete all required details</p>
+			{% elseif errors['login'] is defined %}
+				<p><i class='fa fa-warning'></i> {{ errors['login'] }}</p>
+	  		{% endif %}
+
+	    	<form accept-charset="UTF-8" role="form" action='{{ app.Path("web") }}/account/login' method='post'>
+            <fieldset>
+	    	  	
+	    	  	{% if errors['username'] is defined or errors['login'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+	    		    <input class="form-control" placeholder="Username" name="username" type="text" value="{{ request.Form('username') }}" autocomplete='off'>
+	    		</div>
+
+	    		{% if errors['password'] is defined or errors['login'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+	    			<input class="form-control" placeholder="Password" name="password" type="password" value="{{ request.Form('password') }}" autocomplete='off'>
+	    		</div>
+	    		<div class="checkbox">
+	    	    	<label>
+	    	    		<input name="remember" type="checkbox" value="Remember Me"> Remember Me
+	    	    	</label>
+
+	    	    	<span class='pull-right'><a href=''>Forgot my password</a></span>
+	    	    </div>
+
+	    	    <div>
+	    		<input class="btn btn-lg btn-danger btn-block" type="submit" value="Login">
+	    		<a href='{{ app.Path("web") }}/account/signup/' class="btn btn-lg btn-default btn-block">Sign Up</a>
+	    	</fieldset>
+	      	</form>
+	    </div>
+	</div>
+{% endblock %}

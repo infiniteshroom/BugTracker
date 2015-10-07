@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    {{ Asset.css('default/css/bootstrap.css') }}
+    {{ Asset.css('default/css/main.css') }}
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    {% block styles %}{% endblock %}
+
+
+  </head>
+
+  <body>
+
+    {% if switch_nonav is defined %}
+
+    {% else %}
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><i class='fa fa-bug'></i> Bug Tracker</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            {% if request.Controller() == 'Ticket' %}
+            <li class='active'><a href="#">Tickets</a></li>
+            {% else %}
+             <li><a href="/">Tickets</a></li>
+            {% endif %}
+
+            <!--<li><a href="#">Wiki</a></li>
+            <li><a href="#">Settings</a></li>-->
+          </ul>
+
+          {% if auth.IsGuest() %}
+
+          <ul class="nav navbar-nav pull-right">
+          <li><a href="{{ app.Path('web') }}/account/signup/">Sign Up</a></li>
+          <li class="divider-vertical"></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+            <div class="dropdown-menu login-form">
+              
+              <form action="{{ app.Path('web') }}/account/login" method="post" accept-charset="UTF-8">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class='fa fa-user'></i></span>
+                    <input id="user_username" placeholder='Username...' class="form-control" type="text" name="username" />
+                  </div>
+
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class='fa fa-lock'></i></span>
+                    <input id="user_password" placeholder='Password...' class="form-control" type="password" name="password" />
+
+                  </div>
+
+
+                  <input id="user_remember_me" type="checkbox" name="remember" value="1" />
+                  <label class="string optional" for="user_remember_me"> Remember me</label>
+                 
+                  <input class="btn btn-default btn-block" type="submit" value="Sign In" />
+            </form>
+            </div>
+          </li>
+        </ul>
+
+        {% else %}
+
+          <ul class="nav navbar-nav pull-right">
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img id='avatar' src="{{ auth.User().getAvatarLink() }}">Welcome, {{ auth.User().username }}<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/profile/view/{{ auth.User().username }}"><i class='fa fa-user'></i> My Profile</a></li>
+            <li><a href="/account/settings/"><i class='fa fa-cog'></i> Account Settings</a></li>
+            <li class="divider"></li>
+            <li><a href="/account/logout/"><i class='fa fa-unlock'></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+
+
+        {% endif %}
+
+
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+
+    <div class="container">
+
+      
+    {% block content %}{% endblock %}
+
+    <!--  <footer>
+        <p>&copy; Company 2014</p>
+      </footer>-->
+
+    </div><!--/.container-->
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="offcanvas.js"></script>
+    {% block scripts %}{% endblock %}
+    {{ Asset.js('default/js/app.js') }}
+  </body>
+</html>

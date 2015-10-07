@@ -1,0 +1,87 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bug Tracker - Signup{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-md-4 col-md-offset-4">
+	<div class="panel panel-default">
+	  	<div class="panel-heading">
+	    	<h3 class="panel-title">Please fill out details to signup</h3>
+	 	</div>
+	  	<div class="panel-body">
+	  		{% if (errors['name'] is defined or errors['username'] is defined or errors['password'] is defined) and errors['taken'] is not defined %}
+				<p><i class='fa fa-warning'></i> Please complete all required details</p>
+			{% elseif errors['email'] is defined and errors['taken'] is not defined %}
+				<p><i class='fa fa-warning'></i> Please enter a valid email address.</p>
+			{% elseif errors['taken'] is defined %}
+				<p><i class='fa fa-warning'></i> {{ errors['taken'] }}</p>
+	  		{% endif %}
+
+	    	<form accept-charset="UTF-8" role="form" action='{{ app.Path("web") }}/account/signup' method='post'>
+            <fieldset>
+
+	    	  	{% if errors['name'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+
+	    			{% if name is defined %}
+	    		    <input class="form-control" placeholder="Full name..." name="name" type="text" value="{{ name }}" autocomplete='off'>
+	    			{% else %}
+	    		    <input class="form-control" placeholder="Full name..." name="name" type="text" value="" autocomplete='off'>
+	    		    {% endif %}
+	    		</div>
+
+
+	    		{% if errors['username'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+
+	    			{% if username is defined %}
+	    		    <input class="form-control" placeholder="Username..." name="username" type="text" value="{{ username }}" autocomplete='off'>
+	    			{% else %}
+	    		    <input class="form-control" placeholder="Username..." name="username" type="text" value="" autocomplete='off'>
+	    		    {% endif %}
+
+	    		</div>
+
+	    		{% if errors['password'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+
+	    			{% if password is defined %}
+	    		    <input class="form-control" placeholder="Password..." name="password" type="password" value="{{ password }}" autocomplete='off'>
+	    			{% else %}
+	    		    <input class="form-control" placeholder="Password..." name="password" type="password" value="" autocomplete='off'>
+	    		    {% endif %}
+
+	    		</div>
+
+
+	    		{% if errors['email'] is defined %}
+	    		<div class="form-group has-error">
+	    		{% else %}
+				<div class="form-group">
+	    		{% endif %}
+
+	    			{% if email is defined %}
+	    		    <input class="form-control" placeholder="Email address..." name="email" type="text" value="{{ email }}" autocomplete='off'>
+	    			{% else %}
+	    		    <input class="form-control" placeholder="Email address..." name="email" type="text" value="" autocomplete='off'>
+	    		    {% endif %}
+
+	    		</div>   		
+
+	    	    <div>
+	    		<input class="btn btn-lg btn-danger btn-block" type="submit" value="Sign up">
+	    	</fieldset>
+	      	</form>
+	    </div>
+	</div>
+{% endblock %}

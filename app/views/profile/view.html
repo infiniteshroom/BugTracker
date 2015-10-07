@@ -1,0 +1,68 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bug Tracker - {{ user.username }}{% endblock %}
+
+{% block content %}
+   <div class="row">
+
+    <div class="col-xs-1 col-sm-3">
+      <img src='{{ user.getAvatarLink() }}' style='width:150px;height:150px;' />
+    </div>
+
+    <div class='col-xs-5 col-sm-7'>
+      <h1>{{ user.first_name }} {{ user.middle_name }}  {{ user.last_name }} / <span class='colorize'>{{ user.username }}</span></h1>
+      <h4 style='margin-top:-10px;color:gray'>Member since: {{ user.getRegisterDate() }}</h4>
+
+	{% if user.email != null %}
+      <a href='mailto:{{ user.email }}' class='btn btn-default' style='font-size:23px;padding:10px 18px 10px 18px'><i class='fa fa-envelope'></i></a>
+    {% endif %}
+
+
+	{% if user.twitter != null %}
+       <a target='_blank' href='{{ user.twitter }}' class='btn btn-info' style='font-size:23px;padding:10px 18px 10px 18px'><i class='fa fa-twitter'></i></a>
+   {% endif %}
+
+	{% if user.website != null %}
+       <a target='_blank' href='{{ user.website }}' class='btn btn-success' style='font-size:23px;padding:10px 18px 10px 18px'><i class='fa fa-link'></i></a>
+    {% endif %}
+	
+	{% if user.facebook != null %}
+        <a target='_blank' href='{{ user.facebook }}' class='btn btn-success' style='font-size:23px;padding:10px 24px 10px 24px;background-color:#3b5998;
+border-color:#3b5998'><i class='fa fa-facebook'></i></a>
+	{% endif %}
+
+    </div>
+  </div><!--/row-->
+		
+	<div>
+		<h3>About me</h3>
+
+		{% if user.bio != "" %}
+		<p style='text-align:justify;font-size: 18.75px;font-weight: 300;line-height: 1.25;color:#6f6f6f;width:75%'>{{ user.bio }}</p>
+		{% else %}
+		<p style='text-align:justify;font-size: 18.75px;font-weight: 300;line-height: 1.25;color:#6f6f6f;width:75%'>This doesn't have a bio yet.....</p>
+		{% endif %}
+	</div>
+      <div>
+    	{% set comments = user.Relation('Comments') %}
+    	<h3><span class='colorize'>All</span> Comments ({{ comments.count() }})</h3>
+
+    	{% if comments.count() > 0 %}   
+		{% for comment in comments.orderby('comments.created_at', 'desc').results() %}
+		{% set bug = comment.Relation('Bug').results('one') %}
+    	   <div class="comment">
+            <blockquote>
+              <div class="row">
+                <div class="col-sm-9">
+                  <p>{{ comment.contents }}</p>
+                  <small><a href='/ticket/view/{{ bug.id }}'>{{ bug.title }}</a> | {{ comment.getCreationDate() }}</small>
+                </div>
+              </div>
+            </blockquote>
+   		 </div>
+   		{% endfor %}
+   		{% else %}
+   		<p style='text-align:justify;font-size: 18.75px;font-weight: 300;line-height: 1.25;color:#6f6f6f;width:75%'>This user hasn't made any comments yet...</p>
+   		{% endif %}
+
+{% endblock %}

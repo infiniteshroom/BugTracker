@@ -1,0 +1,161 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bugtracker - Account Settings{% endblock %}
+
+{% block content %}
+
+	{% set user = auth.User() %}
+	<div class='row'>
+
+		<div class='col-xs-4 col-sm-2'>
+			<a href="#" class="thumbnail">
+				<img id='avatar-image' style='width:150px;height:150px;' src='{{ user.getAvatarLink() }}' />
+			</a>
+
+			<button class='btn btn-default' style='width:97%;' id='change-avatar'>
+				<i class='fa fa-picture-o'></i> Change avatar
+			</button>
+		</div>
+
+		<div class='col-xs-12 col-sm-8'>
+		<h1><span class='colorize'>Account</span> Settings</h1>
+		<h3 style='color:gray;margin-top:-10px;'>
+			Manage your account/profile settings.
+		</h3>
+
+
+		{% if errors is defined %}
+		<h4><span class='colorize'><i class='fa fa-warning'></i> Please complete all required details</h4>
+		{% endif %}
+
+		{% if success is defined %}
+		<h4><span class='success'><i class='fa fa-smile-o'></i> Account settings updated successfully</h4>
+		{% endif %}
+
+		<p><form class="form-horizontal" enctype='multipart/form-data' role="form" method='post' action='{{app.Path("web")}}/account/settings/'>
+		<input type='file' class='upload' name='avatar' id='avatar-upload' />
+
+			{% if errors['firstname'] %}
+    		<div class="form-group has-error">
+    		{% else %}
+			<div class="form-group">
+    		{% endif %}
+
+		    <label for="inputEmail3" class="col-sm-2 control-label">First Name</label>
+		    <div class="col-sm-10">
+		      {% if errors['firstname'] is not defined %}
+		      <input type="text" class="form-control" name='firstname' placeholder="" value='{{ user.first_name }}'>
+			  {% else %}
+			  <input type="text" class="form-control" name='firstname' placeholder="" value=''>
+			  {% endif %}
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">Middle Name</label>
+		    <div class="col-sm-10">
+		      {% if errors['middlename'] is not defined %}
+		      <input type="text" class="form-control" name='middlename' placeholder="" value='{{ user.middle_name }}'>
+			  {% else %}
+			  <input type="text" class="form-control" name='middlename' placeholder="" value=''>
+			  {% endif %}
+		    </div>
+		  </div>
+
+			{% if errors['lastname'] %}
+    		<div class="form-group has-error">
+    		{% else %}
+			<div class="form-group">
+    		{% endif %}
+		    <label for="inputPassword3" class="col-sm-2 control-label">Last Name</label>
+		    <div class="col-sm-10">
+		      {% if errors['lastname'] is not defined %}
+		      <input type="text" class="form-control" name='lastname' placeholder="" value='{{ user.last_name }}'>
+			  {% else %}
+			  <input type="text" class="form-control" name='lastname' placeholder="" value=''>
+			  {% endif %}
+		    </div>
+		  </div>
+
+		 	{% if errors['email'] %}
+    		<div class="form-group has-error">
+    		{% else %}
+			<div class="form-group">
+    		{% endif %}
+
+		    <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
+		    <div class="col-sm-10">
+
+		      {% if errors['email'] is not defined %}
+		      <input type="text" class="form-control" name='email' placeholder="" value='{{ user.email }}'>
+			  {% else %}
+			  <input type="text" class="form-control" name='email' placeholder="" value=''>
+			  {% endif %}
+		    </div>
+		  </div>
+
+		 <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">Website</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='website' placeholder="" value='{{ user.website }}'>
+		    </div>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">Facebook</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='twitter' placeholder="" value='{{ user.facebook }}'>
+		    </div>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">Twitter</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='twitter' placeholder="" value='{{ user.twitter }}'>
+		    </div>
+		  </div>
+
+		  	<div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">About me</label>
+		    <div class="col-sm-10">
+		      <textarea rows='8' class='form-control' name='about'>{{ user.bio }}</textarea>
+		    </div>
+		  </div>
+
+
+		  <p><button class='btn btn-danger' style='padding-top:10px;padding-bottom:10px;'><i class='fa fa-save'></i> Update</button></p>
+		  </form></p>
+
+		  <h1><span class='colorize'>Change</span> Password</h1>
+
+		  <p><form class="form-horizontal" role="form">
+		  <div class="form-group">
+		    <label for="inputEmail3" class="col-sm-2 control-label">Current password</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='oldpassword' placeholder="" value=''>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">New Password</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='newpassword' placeholder="" value=''>
+		    </div>
+		  </div>
+
+		  <div class="form-group">
+		    <label for="inputPassword3" class="col-sm-2 control-label">Confirm new password</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name='confirmnewpassword' placeholder="" value=''>
+		    </div>
+		  </div>
+		  </form>
+
+		  <br />
+
+		  <p><button class='btn btn-danger' style='padding-top:10px;padding-bottom:10px;'><i class='fa fa-save'></i> Update</button></p>
+
+		</div>
+
+
+
+	<div class='clearfix'></div>
+{% endblock %}

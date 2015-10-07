@@ -1,0 +1,16 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bugtracker - Ticket not found{% endblock %}
+
+{% block content %}
+	<div>
+		<h1>Ticket not found</h1>
+		<h3>
+			Sorry this ticket cannot be found or has been removed.
+		</h3>
+
+		<p> Return to <a href='{{ app.Path("web") }}/'>main page</a></p>
+	</div>
+
+	<div class='clearfix'></div>
+{% endblock %}

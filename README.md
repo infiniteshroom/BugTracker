@@ -1,2 +1,6 @@
-# BugTracker
-BugTracker based on Red Framework for Former employer cira 2013
+Red Framework
+===
+
+>By Mark J. Lang
+
+

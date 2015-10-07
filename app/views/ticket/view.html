@@ -1,0 +1,133 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bug Tracker - Tickets{% endblock %}
+
+{% block content %}
+
+
+{# define relation variables - This is important, as it reduces database calls #}
+{% set user = bug.Relation('User').results()[0] %}
+
+   <div class="row row-offcanvas row-offcanvas-right">
+
+    <div class="col-xs-12 col-sm-9" id='ticket' style='margin-bottom:600px;'>
+
+    <ol class="breadcrumb">
+      <li><a href="{{ app.Path('web') }}/">Home</a></li>
+      <li><a href="{{ app.Path('web') }}/ticket/">Tickets</a></li>
+      <li>1</li>
+    </ol>
+
+
+    <h1>{{ bug.title }}</h1>
+    <h3><span>{{ bug.getFormattedDate()}}</span> By <img src="{{ user.getAvatarLink() }}"><a href='{{ app.Path("web") }}/profile/view/{{ user.username }}'>{{user.username}}</a></h3>
+
+    <div class='clearfix'></div>
+    
+    <div class='row' style='margin-top:20px;'>
+      <div class="col-xs-6 col-sm-4">
+        <p>
+          Type:
+          {% if bug.type_id == 1 %}
+            <span class="tag label label-danger">{{ bug.Relation('Type').results('one').name}}</span>
+          {% elseif bug.type_id == 2 %}
+            <span class="tag label label-success">{{ bug.Relation('Type').results('one').name}}</span>
+          {% elseif bug.status_id == 3 %}
+            <span class="tag label label-info">{{ bug.Relation('Status').results('one').name}}</span>
+          {% endif %}
+        </p>
+
+        <p>
+            Version:
+           <span class="tag label label-default">{{ bug.Relation('Version').results('one').name }}</span>
+        </p>
+
+
+      </div>
+
+      <div class="col-xs-6 col-sm-4">
+        <p>
+          Status:
+          {% if bug.status_id == 1 %}
+            <span class="tag label label-info">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 3 %}
+            <span class="tag label label-default">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 4 %}
+            <span class="tag label label-success">{{ bug.Relation('Status').results('one').name}}</span>
+          {% elseif bug.status_id == 6 %}
+            <span class="tag label label-danger">{{ bug.Relation('Status').results('one').name}}</span>
+          {% endif %}
+        </p>
+
+        <p>
+            Component:
+            <span class="tag label label-info">{{ bug.Relation('Component').results('one').name }}</span>
+        </p>
+      </div>
+    
+    </div>
+
+    <p style='margin-top:10px;margin-bottom:50px;'>{{ bug.contents | raw }}</p>
+
+    
+    {% set comments = bug.Relation('Comments') %}
+    <h3>All Comments ({{ comments.count() }})</h3>
+
+    {% if comments.count() == 0 %}
+      <p style='color:gray'>No comments on this ticket yet...</p>
+    {% endif %}
+
+    {% for comment in comments.orderby('created_at', 'desc').results() %}
+    
+    {% set user = bug.Relation('User').results()[0] %}
+      <div class='row' style='margin-top:20px;'>
+        <div class='col-xs-2 col-sm-1'>
+          <img src="{{ user.getAvatarLink() }}" style='height:60px'/>
+        </div>
+        <div class='col-xs-12 col-sm-8'>
+          <p><a href='{{ app.Path("web") }}/profile/view/{{ user.username }}'>{{ user.username }}</a> <span style='color:#C4C4C4;font-size:12px;padding-left:10px;'>{{ comment.getCreationDate() }}</span></p>
+          <p>{{ comment.contents }}</p>
+          <p>
+            <a href=''>Reply</a> 
+
+        </p>
+
+        </div>
+
+
+      </div>
+    
+    {% endfor %}
+
+</div>
+    
+
+  {% if auth.IsGuest() == false %}
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class="fa fa-refresh"></i> Actions</a>
+        <a href="{{ app.Path('web') }}/ticket/edit/{{ bug.id }}" class="list-group-item">Edit this ticket</a>
+        <a href="{{ app.Path('web') }}/ticket/delete/{{ bug.id }}" class="list-group-item">Delete this ticket</a>
+      </div>
+    </div><!--/span-->
+  {% endif %}
+
+  {% if auth.IsGuest() %}
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class='fa fa-dashboard'></i> Meta</a>
+        <a href="{{ app.Path('web') }}/account/login/" class="list-group-item">Login</a>
+        <a href="{{ app.Path('web') }}/account/signup/" class="list-group-item">Sign up</a>
+      </div> 
+  {% else %}
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class='fa fa-dashboard'></i> Meta</a>
+        <a href="{{ app.Path('web') }}/account/logout/" class="list-group-item">Logout [ {{ auth.User().username }} ]</a>
+      </div> 
+
+  {% endif %}
+
+  </div><!--/row-->
+{% endblock %}

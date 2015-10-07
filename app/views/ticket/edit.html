@@ -1,0 +1,145 @@
+{% extends "layouts/index.html" %}
+
+{% block title %}Bugtracker - Edit ticket - {{ bug.title }} {% endblock %}
+
+{% block styles %}
+	{{ Asset.css('default/css/summernote.css') }}
+	{{ Asset.css('default/css/bootstrap-select.css') }}
+{% endblock %}
+
+{% block scripts %}
+	{{ Asset.js('default/js/summernote.js') }}
+	{{ Asset.js('default/js/bootstrap-select.js') }}
+{% endblock %}
+
+{% block content %}
+	
+	<h1><span class='colorize'>Edit</span> ticket - "<span class='colorize'>{{ bug.title }}</span>"</h1>
+
+	<h3 style='color:gray;margin-top:-10px;'>Fill in the details - to edit the bug ticket.</h3>
+
+	{% if errors['title'] is defined or errors['content'] is defined %}
+	<h4><span class='colorize'><i class='fa fa-warning'></i> Please complete all required details</h4>
+	{% endif %}
+
+	<form action='{{app.Path("web")}}/ticket/edit/{{ bug.id }}' method='post'>
+	<div style='width:90%'>
+		{% if errors['title'] is defined %}
+		<div class="form-group has-error">
+		{% else %}
+		<div class="form-group">
+		{% endif %}
+			<input type='text' class='form-control ticket-create' name='title' value='{{ bug.title }}' placeholder='Bug title.....'/>
+
+			<textarea class="editor" name="content" placeholder='Enter a description..'>{{ bug.contents }}</textarea>
+		</div>
+
+	</div>
+
+	<h2><span class='colorize'>Ticket</span> Details</h2>
+
+	<div class='row'>
+		<div class='col-xs-1 col-sm-2' style='line-height:2'>
+			<h3>Version:</h3>
+			<h3>Component:</h3>
+			<h3>Assigned to:</h3>
+		</div>
+
+		<div class='col-xs-2 col-sm-4'>
+			<select class="selectpicker" name='version' data-style="btn-default">
+				{% for version in versions %}
+
+				{% if bug.version_id == version.id %}
+				<option selected value="{{ version.id }}">{{ version.name }}</option>
+				{% else %}
+				<option value="{{ version.id }}">{{ version.name }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='component' data-style="btn-default">
+				{% for component in components %}
+				
+				{% if bug.component_id == component.id %}
+				<option selected value="{{ component.id }}">{{ component.name }}</option>
+				{% else %}
+				<option value="{{ component.id }}">{{ component.name }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='assign' data-style="btn-default">
+
+				{% if bug.assign_id == -1 %}
+				<option selected value=''>Not assigned</option>
+				{% else %}
+				<option value=''>Not assigned</option>
+				{% endif %}
+
+				{% for user in users %}
+
+				{% if bug.assign_id == user.id %}
+				<option selected value="{{ user.id }}">{{ user.username }}</option>
+				{% else %}
+				<option value="{{ user.id }}">{{ user.username }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class='col-xs-1 col-sm-2' style='line-height:2'>
+			<h3>Type:</h3>
+			<h3>Status:</h3>
+			<h3>Priority:</h3>
+		</div>
+
+		<div class='col-xs-1 col-sm-2'>
+			<select class="selectpicker" name='type' data-style="btn-default">
+				{% for type in types %}
+
+				{% if bug.type_id == type.id %}
+				<option selected value="{{ type.id }}">{{ type.name }}</option>
+				{% else %}
+				<option value="{{ type.id }}">{{ type.name }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='status' data-style="btn-default">
+				{% for s in status %}
+
+				{% if bug.status_id == s.id %}
+				<option selected value="{{ s.id }}">{{ s.name }}</option>
+				{% else %}
+				<option value="{{ s.id }}">{{ s.name }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+
+			<select class="selectpicker" name='priority' data-style="btn-default">
+				{% for priority in priorities %}
+
+				{% if bug.priority_id == priority.id %}
+				<option selected value="{{ priority.id }}">{{ priority.name }}</option>
+				{% else %}
+				<option value="{{ priority.id }}">{{ priority.name }}</option>
+				{% endif %}
+
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div style='margin-top:30px'>
+	<button class='btn btn-danger'>Save</button>
+	<button class='btn btn-default'>Reset</button>
+	</div>
+	</form>
+
+	<div class='clearfix'></div>
+{% endblock %}

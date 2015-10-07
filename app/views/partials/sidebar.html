@@ -1,0 +1,35 @@
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class="fa fa-filter"></i> Filter</a>
+        <a href="/" class="list-group-item">All Tickets</a>
+        {% for status in status_types %}
+        <a href="{{ app.Path('web') }}/filter/status/{{ status.id }}" class="list-group-item">{{ status.name }} Tickets</a>
+        {% endfor %}
+      </div>
+    </div><!--/span-->
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class="fa fa-refresh"></i> Recent Bugs</a>
+        <a href="#" class="list-group-item">This is a bug</a>
+        <a href="#" class="list-group-item">Graphics error</a>
+      </div>
+    </div><!--/span-->
+
+  {% if auth.IsGuest() %}
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class='fa fa-dashboard'></i> Meta</a>
+        <a href="{{ app.Path('web') }}/account/login/" class="list-group-item">Login</a>
+        <a href="{{ app.Path('web') }}/account/signup/" class="list-group-item">Sign up</a>
+      </div> 
+  {% else %}
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+      <div class="list-group archives">
+        <a href="#" class="list-group-item active"><i class='fa fa-dashboard'></i> Meta</a>
+        <a href="{{ app.Path('web') }}/account/logout/" class="list-group-item">Logout [ {{ auth.User().username }} ]</a>
+      </div> 
+
+  {% endif %}
